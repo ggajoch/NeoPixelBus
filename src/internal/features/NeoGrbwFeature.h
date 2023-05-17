@@ -33,10 +33,12 @@ public:
     {
         uint8_t* p = getPixelAddress(pPixels, indexPixel);
 
+        *p++ = color.W; // warm white
+        *p++ = 0; // not usd
         *p++ = color.G;
         *p++ = color.R;
         *p++ = color.B;
-        *p = color.W;
+        *p++ = (color.W * 4) / 10;   // cold white
     }
 
     static ColorObject retrievePixelColor(const uint8_t* pPixels, uint16_t indexPixel)
@@ -44,25 +46,29 @@ public:
         ColorObject color;
         const uint8_t* p = getPixelAddress(pPixels, indexPixel);
 
+        color.W = *p++;
+        p++;
         color.G = *p++;
         color.R = *p++;
         color.B = *p++;
-        color.W = *p;
+        p++;
 
 
         return color;
     }
-
+    
     static ColorObject retrievePixelColor_P(PGM_VOID_P pPixels, uint16_t indexPixel)
     {
         ColorObject color;
         const uint8_t* p = getPixelAddress(reinterpret_cast<const uint8_t*>(pPixels), indexPixel);
 
+        color.W = pgm_read_byte(p++);
+        p++;
         color.G = pgm_read_byte(p++);
         color.R = pgm_read_byte(p++);
         color.B = pgm_read_byte(p++);
-        color.W = pgm_read_byte(p);
+        p++;
 
         return color;
-    }
+    }  
 };

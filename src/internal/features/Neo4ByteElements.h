@@ -29,7 +29,7 @@ License along with NeoPixel.  If not, see
 class Neo4ByteElementsBase
 {
 public:
-    static const size_t PixelSize = 4;
+    static const size_t PixelSize = 6;
 
     static uint8_t* getPixelAddress(uint8_t* pPixels, uint16_t indexPixel)
     {
@@ -42,10 +42,10 @@ public:
 
     static void replicatePixel(uint8_t* pPixelDest, const uint8_t* pPixelSrc, uint16_t count)
     {
-        uint32_t* pDest = reinterpret_cast<uint32_t*>(pPixelDest);
-        const uint32_t* pSrc = reinterpret_cast<const uint32_t*>(pPixelSrc);
-        const uint32_t* pEnd = pDest + count; // * PixelSize / sizeof(*pDest);
+        uint16_t* pDest = reinterpret_cast<uint16_t*>(pPixelDest);
+        const uint16_t* pSrc = reinterpret_cast<const uint16_t*>(pPixelSrc);
 
+        uint16_t* pEnd = pDest + (count * PixelSize / 2);
         while (pDest < pEnd)
         {
             *pDest++ = *pSrc;
@@ -54,10 +54,9 @@ public:
 
     static void movePixelsInc(uint8_t* pPixelDest, const uint8_t* pPixelSrc, uint16_t count)
     {
-        uint32_t* pDest = reinterpret_cast<uint32_t*>(pPixelDest);
-        const uint32_t* pSrc = reinterpret_cast<const uint32_t*>(pPixelSrc);
-        const uint32_t* pEnd = pDest + count; // * PixelSize / sizeof(*pDest);
-
+        uint16_t* pDest = reinterpret_cast<uint16_t*>(pPixelDest);
+        const uint16_t* pSrc = reinterpret_cast<const uint16_t*>(pPixelSrc);
+        uint16_t* pEnd = pDest + (count * PixelSize / 2);
         while (pDest < pEnd)
         {
             *pDest++ = *pSrc++;
@@ -66,23 +65,21 @@ public:
 
     static void movePixelsInc_P(uint8_t* pPixelDest, PGM_VOID_P pPixelSrc, uint16_t count)
     {
-        uint32_t* pDest = reinterpret_cast<uint32_t*>(pPixelDest);
-        const uint32_t* pSrc = reinterpret_cast<const uint32_t*>(pPixelSrc);
-        const uint32_t* pEnd = pDest + count; // * PixelSize / sizeof(*pDest);
-
+        uint16_t* pDest = reinterpret_cast<uint16_t*>(pPixelDest);
+        const uint16_t* pSrc = reinterpret_cast<const uint16_t*>(pPixelSrc);
+        uint16_t* pEnd = pDest + (count * PixelSize / 2);
         while (pDest < pEnd)
         {
-            *pDest++ = pgm_read_dword(pSrc++);
+            *pDest++ = pgm_read_word(pSrc++);
         }
     }
 
     static void movePixelsDec(uint8_t* pPixelDest, const uint8_t* pPixelSrc, uint16_t count)
     {
-        uint32_t* pDest = reinterpret_cast<uint32_t*>(pPixelDest);
-        const uint32_t* pSrc = reinterpret_cast<const uint32_t*>(pPixelSrc);
-        uint32_t* pDestBack = pDest + count; // * PixelSize / sizeof(*pDest);
-        const uint32_t* pSrcBack = pSrc + count; // * PixelSize / sizeof(*pSrc);
-
+        uint16_t* pDest = reinterpret_cast<uint16_t*>(pPixelDest);
+        const uint16_t* pSrc = reinterpret_cast<const uint16_t*>(pPixelSrc);
+        uint16_t* pDestBack = pDest + (count * PixelSize / 2);
+        const uint16_t* pSrcBack = pSrc + (count * PixelSize / 2);
         while (pDestBack > pDest)
         {
             *--pDestBack = *--pSrcBack;
