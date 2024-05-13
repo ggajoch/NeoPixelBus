@@ -34,14 +34,13 @@ public:
     static void applyPixelColor(uint8_t* pPixels, uint16_t indexPixel, ColorObject color)
     {
         uint8_t* p = getPixelAddress(pPixels, indexPixel);
-
+// <ColorIndexG, ColorIndexR, ColorIndexB, ColorIndexCW, ColorIndexWW>
         *p++ = color[V_IC_1];
+        *p++ = 0x00; // X
         *p++ = color[V_IC_2];
         *p++ = color[V_IC_3];
         *p++ = color[V_IC_4];
         *p++ = color[V_IC_5];
-        
-        *p = 0x00; // X
     }
 
     static ColorObject retrievePixelColor(const uint8_t* pPixels, uint16_t indexPixel)
@@ -50,11 +49,12 @@ public:
         const uint8_t* p = getPixelAddress(pPixels, indexPixel);
 
         color[V_IC_1] = *p++;
+        // ignore the x
+        *p++;
         color[V_IC_2] = *p++;
         color[V_IC_3] = *p++;
         color[V_IC_4] = *p++;
         color[V_IC_5] = *p;
-        // ignore the x
 
         return color;
     }
@@ -65,11 +65,12 @@ public:
         const uint8_t* p = getPixelAddress(reinterpret_cast<const uint8_t*>(pPixels), indexPixel);
 
         color[V_IC_1] = pgm_read_byte(p++);
+        // ignore the x
+        p++;
         color[V_IC_2] = pgm_read_byte(p++);
         color[V_IC_3] = pgm_read_byte(p++);
         color[V_IC_4] = pgm_read_byte(p++);
         color[V_IC_5] = pgm_read_byte(p);
-        // ignore the x
 
         return color;
     }
