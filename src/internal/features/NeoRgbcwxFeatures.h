@@ -27,7 +27,7 @@ License along with NeoPixel.  If not, see
 #pragma once
 
 class NeoGrbcwxFeature : 
-    public Neo6xByteFeature<ColorIndexG, ColorIndexR, ColorIndexB, ColorIndexCW, ColorIndexWW>,
+    public Neo6xByteFeature<ColorIndexWW, ColorIndexG, ColorIndexR, ColorIndexB, ColorIndexCW>,
     public NeoElementsNoSettings
 {
 };
